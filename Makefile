@@ -1,33 +1,55 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Iinclude -Wall -g
+LDFLAGS = -lcunit
 
-# Source files
-SRCS = src/main.c src/token.c src/variable.c src/tokenizer.c src/parser.c src/evaluator.c
+# Directories
+BIN_DIR = build/bin
+OBJ_DIR = build/obj
+TEST_DIR = tests
+
+# Source files for the main application (excluding main.c)
+SRCS = $(filter-out src/main.c, $(wildcard src/*.c))
 
 # Object files
-OBJS = $(SRCS:.c=.o)
+OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+# Test source files and their corresponding executables
+TEST_SRCS = $(wildcard $(TEST_DIR)/*.c)
+TEST_BINS = $(patsubst $(TEST_DIR)/%.c, $(BIN_DIR)/%, $(TEST_SRCS))
 
 # Executable name
-TARGET = build/calculator
+TARGET = $(BIN_DIR)/calculator
 
-# Create build directory if it doesn't exist
-BUILD_DIR = build
-$(shell mkdir -p $(BUILD_DIR))
+# Create necessary directories
+$(shell mkdir -p $(BIN_DIR) $(OBJ_DIR))
 
 # Default rule
 all: $(TARGET)
 
 # Linking rule
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+$(TARGET): src/main.c $(OBJS) | $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Compilation rule
-%.o: %.c
+$(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Build and run all tests
+test: $(TEST_BINS)
+	@echo "Running tests..."
+	@for test_bin in $(TEST_BINS); do \
+		echo "=> Running $$test_bin"; \
+		./$$test_bin; \
+	done
+	@echo "All tests passed."
+
+# Rule to build individual test executables
+$(BIN_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $< $(OBJS) $(LDFLAGS)
 
 # Clean rule
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf build
 
-.PHONY: all clean
+.PHONY: all clean test
