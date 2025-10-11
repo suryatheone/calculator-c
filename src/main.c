@@ -54,8 +54,13 @@ void printHelp() {
   printf("Variable 'x' set to 10.00\n");
   printf("> x * 2 + 5\n");
   printf("Result: 25.00\n\n");
+  printf("Supported functions:\n");
+  printf("One argument: sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, exp, log, log10, log2, sqrt, cbrt, ceil, floor, trunc, round, fabs, erf, erfc, tgamma, lgamma\n");
+  printf("Two arguments (use space as separator): pow, fmod, atan2, hypot, fmin, fmax\n");
+  printf("\n");
   printf("Commands:\n");
   printf("help: Show this help message.\n");
+  printf("clear: Clear the screen.\n");
   printf("exit: Exit the calculator.\n");
 }
 
@@ -73,6 +78,10 @@ int main() {
     if (strcmp(expression, "exit") == 0) break;
     if (strcmp(expression, "help") == 0) {
       printHelp();
+      continue;
+    }
+    if (strcmp(expression, "clear") == 0) {
+      system("clear");
       continue;
     }
     if (strlen(expression) == 0) continue;

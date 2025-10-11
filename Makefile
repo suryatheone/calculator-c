@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Iinclude -Wall -g
-LDFLAGS = -lcunit
+LDFLAGS = -lcunit -lm
 
 # Directories
 BIN_DIR = build/bin
@@ -29,7 +29,7 @@ all: $(TARGET)
 
 # Linking rule
 $(TARGET): src/main.c $(OBJS) | $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 # Compilation rule
 $(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)

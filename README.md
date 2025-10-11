@@ -1,6 +1,6 @@
 # C Calculator
 
-A simple interactive command-line calculator that supports basic arithmetic operations (+, -, *, /), parentheses, and variable assignments.
+A simple interactive command-line calculator that supports basic arithmetic operations (+, -, *, /), parentheses, variable assignments, and a wide range of mathematical functions from the math.h library.
 
 ## Features
 
@@ -8,6 +8,7 @@ A simple interactive command-line calculator that supports basic arithmetic oper
 *   Support for parentheses `()`
 *   Variable assignment: `x = 10`
 *   Uses variables in expressions
+*   Extensive mathematical functions (see help for full list)
 *   `exit` command to quit the calculator
 
 ## Project Structure

@@ -32,9 +32,16 @@ Token *tokenize(const char *input, size_t *token_count) {
       char *name = malloc(len + 1);
       strncpy(name, start, len);
       name[len] = '\0';
-      tokens[*token_count].type = TOKEN_TYPE_VARIABLE;
+      // Check if followed by '(' to determine if it's a function
+      const char *temp = p;
+      while (isspace(*temp)) temp++;
+      if (*temp == '(') {
+        tokens[*token_count].type = TOKEN_TYPE_FUNCTION;
+      } else {
+        tokens[*token_count].type = TOKEN_TYPE_VARIABLE;
+      }
       tokens[*token_count].value.variable_name = name;
-    } else if (strchr("+-*/=", *p)) {
+    } else if (strchr("+-*/=,", *p)) {
       tokens[*token_count].type = TOKEN_TYPE_OPERATOR;
       tokens[*token_count].value.operator= *p++;
     } else if (*p == '(' || *p == ')') {
